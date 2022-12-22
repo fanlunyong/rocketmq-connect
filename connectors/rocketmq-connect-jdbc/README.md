@@ -86,7 +86,7 @@ http://${runtime-ip}:${runtime-port}/connectors/${rocketmq-jdbc-connector-name}/
 |source-record-converter      | Integer | YES           |data转换器  | org.apache.rocketmq.connect.doris.converter.JsonConverter |
 
 ```  
-注：1.source拉取的数据写入到以表名自动创建的topic中，如果需要写入特定的topic中则需要指定"connect-topicname" 参数
+注：1.source拉取的数据写入到以表名自动创建的topic中，如果需要写入特定的topic中则需要指定"connect.topicname" 参数
    2.topic.prefix参数可以为自动创建的topic增加前缀，用来进行逻辑的隔离
 ```  
 

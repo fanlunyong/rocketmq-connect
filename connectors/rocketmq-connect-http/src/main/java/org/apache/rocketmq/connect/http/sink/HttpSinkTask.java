@@ -16,6 +16,7 @@ public class HttpSinkTask extends SinkTask {
     private static final Logger log = LoggerFactory.getLogger(HttpSinkTask.class);
 
     private String url;
+    private KeyValue config;
 
     @Override
     public void put(List<ConnectRecord> sinkRecords) throws ConnectException {
@@ -30,12 +31,10 @@ public class HttpSinkTask extends SinkTask {
         }
     }
 
-    @Override
     public void pause() {
 
     }
 
-    @Override
     public void resume() {
 
     }
@@ -45,13 +44,18 @@ public class HttpSinkTask extends SinkTask {
     }
 
     @Override
-    public void init(KeyValue config) {
-        url = config.getString(HttpConstant.URL_CONSTANT);
+    public void start(KeyValue config) {
+        this.init(config);
     }
 
-    @Override
+
+    public void init(KeyValue config) {
+        url = config.getString(HttpConstant.URL_CONSTANT);
+        this.config=config;
+    }
+
     public void start(SinkTaskContext sinkTaskContext) {
-        super.start(sinkTaskContext);
+        super.sinkTaskContext=sinkTaskContext;
     }
 
     @Override

@@ -26,6 +26,7 @@ import org.apache.rocketmq.acl.common.SessionCredentials;
 import org.apache.rocketmq.client.consumer.DefaultLitePullConsumer;
 import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.rebalance.AllocateMessageQueueAveragely;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.TopicConfig;
@@ -108,7 +109,7 @@ public class ConnectUtil {
         if (connectConfig.getAclEnable()) {
             rpcHook = new AclClientRPCHook(new SessionCredentials(connectConfig.getAccessKey(), connectConfig.getSecretKey()));
         }
-        DefaultMQProducer producer = new DefaultMQProducer(rpcHook);
+        DefaultMQProducer producer = new DefaultMQProducer("DEFAULT_PRODUCER",rpcHook,true,null);
         producer.setNamesrvAddr(connectConfig.getNamesrvAddr());
         producer.setInstanceName(createUniqInstance(connectConfig.getNamesrvAddr()));
         producer.setProducerGroup(connectConfig.getRmqProducerGroup());
@@ -139,7 +140,8 @@ public class ConnectUtil {
         if (connectConfig.getAclEnable()) {
             rpcHook = new AclClientRPCHook(new SessionCredentials(connectConfig.getAccessKey(), connectConfig.getSecretKey()));
         }
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(rpcHook);
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(null, "DEFAULT_CONSUMER", rpcHook, new AllocateMessageQueueAveragely(), true, null);
+
         consumer.setNamesrvAddr(connectConfig.getNamesrvAddr());
         consumer.setInstanceName(createUniqInstance(connectConfig.getNamesrvAddr()));
         consumer.setConsumerGroup(createGroupName(connectConfig.getRmqConsumerGroup()));
